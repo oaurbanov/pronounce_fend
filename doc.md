@@ -1,0 +1,1 @@
+npx create-next-app pronounce_fend
