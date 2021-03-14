@@ -29,15 +29,12 @@ const SpectoBox = () => {
   const styles = useStyles();
   return (
     <div className={styles.mainDiv}>
-      <div>
-        <p> the phrase</p>
-      </div>
       <div style={{display:"flex", justifyContent:"center"}}>
         <div className={styles.specto}>
           <p>image of the specto</p>
         </div>
       </div>
-      <div>
+      <div style={{display:"flex", justifyContent:"center"}}>
         <Play></Play>
         <Record></Record>
       </div>
