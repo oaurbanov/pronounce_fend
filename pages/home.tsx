@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Head from 'next/head'
 
 import styles from '../styles/Home.module.css'
@@ -9,7 +9,15 @@ import WordNavigator from '../components/wordNavigator'
 
 
 
-const Home = () => {
+const Home = ({words}) => {
+
+  
+  const [imgUrl, setImgUrl] = useState("http://localhost:5000/spec/merci")
+
+  const handleWordChange = (newUrl : string) => {
+    setImgUrl(newUrl)
+  }
+  
   return (
     <>
       <Head>
@@ -22,11 +30,11 @@ const Home = () => {
       <div style={{display:'flex', flexDirection:"column"}}>
        
         <div style={{height:"70px", display: 'flex', flexDirection:"row", justifyContent:'center'}}>
-          <WordNavigator/>
+          <WordNavigator words={words} onChangeWord={handleWordChange}/>
         </div>
 
         <div style={{display:"flex", flexWrap:"wrap", justifyContent:"space-around" }}>
-          <SpectoBox></SpectoBox>
+          <SpectoBox imgUrl = {imgUrl} ></SpectoBox>
         </div>
       </div>
       
