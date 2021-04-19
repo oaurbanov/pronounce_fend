@@ -80,8 +80,8 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
   }
 
   const getSpecto = async (wordStr) => {
-    setAudio(new Audio(`http://localhost:5000/audio/${wordStr}`))
-    const res = await fetch(`http://localhost:5000/spec/${wordStr}`)
+    setAudio(new Audio(`https://pronouncebend.herokuapp.com/audio/${wordStr}`))
+    const res = await fetch(`https://pronouncebend.herokuapp.com/spec/${wordStr}`)
     console.log(res.url)
     onChangeWord(res.url)
 
@@ -95,7 +95,7 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
     setIndex(indexWord)
     setTextToDisplay(textToDisplay)
 
-    // setAudio(new Audio("http://localhost:5000/audio/merci"))
+    // setAudio(new Audio("https://pronouncebend.herokuapp.com/audio/merci"))
     if (audio){
       audio.play()
     }

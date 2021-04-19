@@ -21,7 +21,7 @@ getServerSicdeProps: fetch data at every request
 getStaticPaths: dinamically generate paths based on the data we are fetching
  */
 export const getServerSideProps = async () => {
-  const res = await fetch('http://localhost:5000/words')
+  const res = await fetch('https://pronouncebend.herokuapp.com/words')
   // const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6')
   const words = await res.json()
 

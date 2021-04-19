@@ -12,7 +12,7 @@ import WordNavigator from '../components/wordNavigator'
 const Home = ({words}) => {
 
   
-  const [imgUrl, setImgUrl] = useState("http://localhost:5000/spec/merci")
+  const [imgUrl, setImgUrl] = useState("https://pronouncebend.herokuapp.com/spec/merci")
 
   const handleWordChange = (newUrl : string) => {
     setImgUrl(newUrl)
