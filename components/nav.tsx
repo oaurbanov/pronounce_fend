@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Link from 'next/link'
 import { 
@@ -9,37 +9,11 @@ import {
   IconButton,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu'
-//TODO: make "Pronounce app" button interactive to home
+
+import useWindowSize from '../utils'
+import {PHONE_WIDTH} from '../config'
 
 const useStyles = makeStyles( (theme) => ({
-  nav : {
-    backgroundColor: "black",
-    color:"white",
-    
-    height: "50px",
-    padding: "10px",
-
-    display: "flex",
-    alignItems: "center",
-  },
-  titleBox : {
-    justifyContent:"center",
-    width:"180px",
-    minWidth:"180px",
-    height:"40px",
-    border:"1px solid white",
-    margin:"0px",
-    // hover: { cursor: "hand" }
-  },
-  ul : {
-    display: "flex",
-    listStyle: "none",
-    justifyContent: "center"
-  },
-  li : {
-    margin: "10px"
-  },
-
   root: {
     flexGrow: 1,
   },
@@ -58,24 +32,75 @@ const useStyles = makeStyles( (theme) => ({
   },
 }));
 
+const Logo = () => {
+  const classes = useStyles();
+  return(
+    <Typography 
+      variant="h6"
+      className={classes.title}
+    >
+      <Link href={'/contact'} >
+        PronounceApp
+      </Link>
+    </Typography>
+  )
+} 
+
 const Nav = () => {
   
   const classes = useStyles();
 
+  const { width } = useWindowSize();
+  const [menuClicked, setMenuClicked] = useState(false)
+  
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            PronounceApp
-          </Typography>
-          <div style={{flexGrow:1}}></div>
-          <Button color="inherit">Contact</Button>
-          <Button color="inherit">About</Button>
-        </Toolbar>
+          {width <= PHONE_WIDTH ?(
+            <>
+              <div 
+                style={{
+                  display:"flex",
+                  alignItems:"center",
+                }}
+              >
+                <IconButton 
+                  edge="start" className={classes.menuButton} 
+                  color="inherit" aria-label="menu"
+                  onClick={()=>{
+                    setMenuClicked(!menuClicked)
+                  }}
+                >
+                  <MenuIcon/>
+                </IconButton>
+                <Logo/>
+              </div>
+              {menuClicked && (
+                <>
+                  <Link  href={'/contact'} >
+                    <Button color="inherit" >Contact</Button>                
+                  </Link>
+                  <Link href={'/about'} >
+                    <Button color="inherit" >About</Button>
+                  </Link>
+                </>
+              )}
+            </>
+          ):
+          (
+            <Toolbar>
+              <Logo/>
+              <div style={{flexGrow:1}}></div>
+              <Link  href={'/contact'} >
+                <Button color="inherit" >Contact</Button>                
+              </Link>
+              <Link href={'/about'} >
+                <Button color="inherit" >About</Button>
+              </Link>
+            </Toolbar>
+
+          )}
       </AppBar>
     </div>
   )
