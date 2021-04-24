@@ -1,8 +1,6 @@
 import React, {useState} from 'react'
 import Head from 'next/head'
-
-import styles from '../styles/Home.module.css'
-
+import {server} from '../config'
 import Nav from '../components/nav'
 import SpectoBox from '../components/spectoBox'
 import WordNavigator from '../components/wordNavigator'
@@ -12,7 +10,7 @@ import WordNavigator from '../components/wordNavigator'
 const Home = ({words}) => {
 
   
-  const [imgUrl, setImgUrl] = useState("https://pronouncebend.herokuapp.com/spec/merci")
+  const [imgUrl, setImgUrl] = useState(`${server}/spec/merci`)
 
   const handleWordChange = (newUrl : string) => {
     setImgUrl(newUrl)

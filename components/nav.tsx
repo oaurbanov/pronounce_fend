@@ -18,6 +18,7 @@ const useStyles = makeStyles( () => ({
   titleBox : {
     justifyContent:"center",
     width:"180px",
+    minWidth:"180px",
     height:"40px",
     border:"1px solid white",
     margin:"0px",

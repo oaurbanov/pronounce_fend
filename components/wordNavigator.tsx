@@ -1,5 +1,5 @@
 import React, {useState, useEffect, HTMLAttributes} from 'react'
-
+import {server} from '../config'
 import IconButton from '@material-ui/core/IconButton'
 import SkipPreviousTwoTone from '@material-ui/icons/SkipPreviousTwoTone';
 import SkipNextTwoTone from '@material-ui/icons/SkipNextTwoTone';
@@ -80,8 +80,8 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
   }
 
   const getSpecto = async (wordStr) => {
-    setAudio(new Audio(`https://pronouncebend.herokuapp.com/audio/${wordStr}`))
-    const res = await fetch(`https://pronouncebend.herokuapp.com/spec/${wordStr}`)
+    setAudio(new Audio(`${server}/audio/${wordStr}`))
+    const res = await fetch(`${server}/spec/${wordStr}`)
     console.log(res.url)
     onChangeWord(res.url)
 
@@ -95,7 +95,7 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
     setIndex(indexWord)
     setTextToDisplay(textToDisplay)
 
-    // setAudio(new Audio("https://pronouncebend.herokuapp.com/audio/merci"))
+    // setAudio(new Audio(`${server}/audio/merci`))
     if (audio){
       audio.play()
     }
