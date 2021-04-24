@@ -1,10 +1,17 @@
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Link from 'next/link'
-
+import { 
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+} from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu'
 //TODO: make "Pronounce app" button interactive to home
 
-const useStyles = makeStyles( () => ({
+const useStyles = makeStyles( (theme) => ({
   nav : {
     backgroundColor: "black",
     color:"white",
@@ -31,33 +38,46 @@ const useStyles = makeStyles( () => ({
   },
   li : {
     margin: "10px"
-  }
+  },
+
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    // marginRight: theme.spacing(2),
+  },
+  title: {
+    fontStyle: "italic",
+    fontWeight: "bold",
+    textAlign:"center",
+    
+    border:"1px solid white",
+    maxWidth:"132px",
+    minWidth:"132px",
+    height:"32px",
+  },
 }));
 
 const Nav = () => {
   
-  const styles = useStyles();
+  const classes = useStyles();
 
   return (
-    <nav className={styles.nav}>
-        <div className={styles.titleBox}>
-          <h1 style={{margin:"5px", fontStyle:"italic"}}>Pronounce app</h1>
-        </div>
-      <div style={{flexGrow:1}}></div>
-      <div>
-        <ul className={styles.ul}>
-          <li className={styles.li}>
-            <Link href=''> Home </Link>
-          </li>
-          <li className={styles.li}>
-            <Link href=''> Contact </Link>
-          </li>
-          <li className={styles.li}>
-            <Link href=''> About </Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            PronounceApp
+          </Typography>
+          <div style={{flexGrow:1}}></div>
+          <Button color="inherit">Contact</Button>
+          <Button color="inherit">About</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
   )
 }
 
