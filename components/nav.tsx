@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Link from 'next/link'
 import { 
@@ -14,7 +14,6 @@ import clsx from 'clsx'
 
 import useWindowSize from '../utils'
 import {PHONE_WIDTH} from '../config'
-import { route } from 'next/dist/next-server/server/router';
 
 const useStyles = makeStyles( (theme) => ({
   root: {
@@ -42,7 +41,7 @@ const useStyles = makeStyles( (theme) => ({
   
 }));
 
-const Logo = () => {
+export const Logo = () => {
   const classes = useStyles();
   return(
     <Typography 
@@ -92,10 +91,6 @@ const Nav = () => {
   const { width } = useWindowSize();
   const [menuClicked, setMenuClicked] = useState(false)
 
-  useEffect(()=> {
-    console.log(router.asPath)
-  },[])
-  
 
   return (
     <div className={classes.root}>

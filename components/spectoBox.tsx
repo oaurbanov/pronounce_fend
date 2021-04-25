@@ -1,8 +1,8 @@
 import React from 'react'
 import { makeStyles} from "@material-ui/core/styles";
 
-import Play from "./buttons/play"
-import Record from "./buttons/record"
+import Play from "./utils/play"
+import Record from "./utils/record"
 
 const useStyles = makeStyles( () => ({
   mainDiv : {
