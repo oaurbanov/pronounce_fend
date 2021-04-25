@@ -1,12 +1,12 @@
 import React from 'react'
 import {NextPage} from 'next'
+import AppDrawer from '../components/appDrawer'
 
 const ContactPage:NextPage = () => {
   return (
-    <div>
+    <AppDrawer>
       <p> This is contact page</p>
-      
-    </div>
+    </AppDrawer>
   )
 }
 

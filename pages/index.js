@@ -1,29 +1,10 @@
 import Home from './home.tsx'
 import {server} from '../config'
-import {createMuiTheme, ThemeProvider} from '@material-ui/core'
-import {blueGrey} from '@material-ui/core/colors'
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#000000"
-    }
-  },
-  typography: {
-    fontFamily: "Sans-serif",
-    fontSize: 12,
-    fontWeightLight: 300,
-    fontWeightRegular: 400,
-    fontWeightMedium: 500,
-    fontWeightBold: 700,
-  }
-})
 
 export default function IndexPage({words}) {
   return (
-    <ThemeProvider theme={theme} >
-      <Home words={words} />
-    </ThemeProvider>
+    <Home words={words} />
   )
 }
 

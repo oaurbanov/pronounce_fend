@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Link from 'next/link'
 import { 
@@ -9,9 +9,12 @@ import {
   IconButton,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu'
+import { useRouter } from 'next/router'
+import clsx from 'clsx'
 
 import useWindowSize from '../utils'
 import {PHONE_WIDTH} from '../config'
+import { route } from 'next/dist/next-server/server/router';
 
 const useStyles = makeStyles( (theme) => ({
   root: {
@@ -30,28 +33,68 @@ const useStyles = makeStyles( (theme) => ({
     minWidth:"132px",
     height:"32px",
   },
+  butUnderLine : {
+    textDecoration:"underline",
+    '&:hover':{
+      textDecoration:"underline",
+    }
+  },
+  
 }));
 
 const Logo = () => {
   const classes = useStyles();
   return(
     <Typography 
-      variant="h6"
-      className={classes.title}
+    variant="h6"
+    className={classes.title}
     >
-      <Link href={'/contact'} >
+      <Link href={'/'} >
         PronounceApp
       </Link>
     </Typography>
   )
 } 
 
+type MenuButtonsParams = {
+  route:string,
+}
+
+const MenuButtons = ({route}) => {
+  const classes = useStyles();
+  return(
+    <>
+      <Link  href={'/contact'} >
+        <Button
+          color="inherit"
+          className={clsx( route==='/contact'&& classes.butUnderLine )}
+          >
+          Contact
+        </Button>                
+      </Link>
+      <Link href={'/about'} >
+        <Button 
+          color="inherit"
+          className={clsx( route==='/about'&& classes.butUnderLine )}
+        >
+          About
+        </Button>
+      </Link>
+    </>
+  )
+}
+
 const Nav = () => {
   
   const classes = useStyles();
+  const router = useRouter()
 
   const { width } = useWindowSize();
   const [menuClicked, setMenuClicked] = useState(false)
+
+  useEffect(()=> {
+    console.log(router.asPath)
+  },[])
   
 
   return (
@@ -77,14 +120,7 @@ const Nav = () => {
                 <Logo/>
               </div>
               {menuClicked && (
-                <>
-                  <Link  href={'/contact'} >
-                    <Button color="inherit" >Contact</Button>                
-                  </Link>
-                  <Link href={'/about'} >
-                    <Button color="inherit" >About</Button>
-                  </Link>
-                </>
+                <MenuButtons route={router.asPath}/>
               )}
             </>
           ):
@@ -92,12 +128,7 @@ const Nav = () => {
             <Toolbar>
               <Logo/>
               <div style={{flexGrow:1}}></div>
-              <Link  href={'/contact'} >
-                <Button color="inherit" >Contact</Button>                
-              </Link>
-              <Link href={'/about'} >
-                <Button color="inherit" >About</Button>
-              </Link>
+              <MenuButtons route={router.asPath}/>
             </Toolbar>
 
           )}
