@@ -26,7 +26,7 @@ type AppDrawerProps = {
   tittle?: string;
 }
 
-const AppDrawer:React.FC<AppDrawerProps> = ({children, title}) => {
+const AppDrawer:React.FC<AppDrawerProps> = ({children}) => {
 
   return (
     <ThemeProvider theme={theme} >
