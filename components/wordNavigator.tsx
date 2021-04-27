@@ -80,13 +80,19 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
   }
 
   const getSpecto = async (wordStr) => {
-    setAudio(new Audio(`${server}/audio/${wordStr}`))
-    const res = await fetch(`${server}/spec/${wordStr}`)
-    console.log(res.url)
-    onChangeWord(res.url)
 
-    //get audio and play
-    //audio.play()
+    try {
+      setAudio(new Audio(`${server}/audio/${wordStr}`))
+      const res = await fetch(`${server}/spec/${wordStr}`)
+      console.log(res.url)
+      onChangeWord(res.url)
+  
+      //get audio and play
+      //audio.play()
+      
+    } catch (error) {
+      console.log(error)
+    }
 
   }
 

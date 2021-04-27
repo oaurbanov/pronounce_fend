@@ -12,7 +12,7 @@ First, run the development server:
 npm build
 npm run dev
 # or
-yarn run build
+yarn build
 yarn run dev
 ```
 

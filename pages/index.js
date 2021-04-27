@@ -23,9 +23,17 @@ getServerSicdeProps: fetch data at every request
 getStaticPaths: dinamically generate paths based on the data we are fetching
  */
 export const getServerSideProps = async () => {
-  const res = await fetch(`${server}/words`)
-  // const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6')
-  const words = await res.json()
+
+  let words = []
+
+  try {
+    const res = await fetch(`${server}/words`)
+    // const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6')
+    words = await res.json()
+    
+  } catch (error) {
+    console.log(error)
+  }
 
   return {
     props : {
