@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import Nav from '../components/nav'
-import {createMuiTheme, ThemeProvider} from '@material-ui/core'
+import {createMuiTheme, makeStyles, Theme, ThemeProvider} from '@material-ui/core'
 
 const theme = createMuiTheme({
   palette: {
@@ -19,12 +19,20 @@ const theme = createMuiTheme({
   }
 })
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root:{
+    height: "100vh",
+    // backgroundColor: "purple",
+  }
+}));
 
 type AppDrawerProps = {
   tittle?: string;
 }
 
 const AppDrawer:React.FC<AppDrawerProps> = ({children}) => {
+
+  const classes = useStyles()
 
   return (
     <ThemeProvider theme={theme} >
@@ -33,11 +41,12 @@ const AppDrawer:React.FC<AppDrawerProps> = ({children}) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Nav/>
-      
-      <main>
-        {children}
-      </main>
+      <div className={classes.root}>
+        <Nav/>
+        <main style={{height:"100%"}}>
+          {children}
+        </main>
+      </div>
     </ThemeProvider>
 
   )

@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles( () => ({
 mainDiv: {
-  width:"400px",
+  width:"360px",
   display: 'flex',
   flexDirection:"row",
   justifyContent:'center',
@@ -112,18 +112,13 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
   // console.log(words)
   
   return (
-    <div className={styles.mainDiv}>
+    <div {...otherProps} className={styles.mainDiv}>
       <IconButton onClick={onPrev}>
         <SkipPreviousTwoTone className={styles.btn}/>
       </IconButton>
       <div style={{width:"200px", height:"70px"}}>
         <p className={styles.wordBox}> {`${textToDisplay}`} </p>
       </div>
-    {/* <div>
-      {articles.map( (article) => (
-        <p> {article.id}</p>
-      ))}      
-    </div> */}
       <IconButton onClick={onNext}>
         <SkipNextTwoTone className={styles.btn}/>
       </IconButton>

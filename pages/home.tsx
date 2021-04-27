@@ -17,15 +17,19 @@ const Home = ({words}) => {
   return (
     <AppDrawer>
 
-      <div style={{display:'flex', flexDirection:"column"}}>
-       
-        <div style={{height:"70px", display: 'flex', flexDirection:"row", justifyContent:'center'}}>
+      <div style={{
+        display:'flex', 
+        flexDirection:"column", 
+        alignItems:"center",
+        height:"100%",
+      }}>
           <WordNavigator words={words} onChangeWord={handleWordChange}/>
-        </div>
-
-        <div style={{display:"flex", flexWrap:"wrap", justifyContent:"space-around" }}>
-          <SpectoBox imgUrl = {imgUrl} ></SpectoBox>
-        </div>
+          <SpectoBox imgUrl = {imgUrl}
+            style={{
+              width: "80%",
+              height: "80%",
+            }}
+          />
       </div>
     
     </AppDrawer>
