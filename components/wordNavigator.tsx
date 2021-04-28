@@ -5,6 +5,9 @@ import SkipPreviousTwoTone from '@material-ui/icons/SkipPreviousTwoTone';
 import SkipNextTwoTone from '@material-ui/icons/SkipNextTwoTone';
 import { makeStyles } from '@material-ui/core';
 
+import {handleErrors} from '../utils'
+
+
 const useStyles = makeStyles( () => ({
 mainDiv: {
   width:"360px",
@@ -41,6 +44,8 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
   const styles = useStyles();
 
   if (text === undefined) { text= "Text of the sound to play"}
+
+  const [disableButton, setDisableButton] = useState(false)
   
   const [indexWord, setIndex] = useState(0)
   // const word0 = words[0]== undefined ? "" : words[0]
@@ -48,35 +53,41 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
 
   const [audio, setAudio] = useState(null)
 
-  const onNext = () => {
+  const onNext = async () => {
+    setDisableButton(true)
+    document.body.style.cursor='wait';
     if (indexWord+1 > words.length-1){
       setIndex(0)
       setTextToDisplay(words[0])
-      getSpecto(words[0])
+      await getSpecto(words[0])
       console.log(0)
     }
     else {
       setIndex(indexWord + 1)      
       setTextToDisplay(words[indexWord+1])
-      getSpecto(words[indexWord+1])
+      await getSpecto(words[indexWord+1])
       console.log(indexWord+1)
     }
+    setDisableButton(false)
   }
 
 
-  const onPrev = () => {
+  const onPrev = async () => {
+    setDisableButton(true)
+    document.body.style.cursor='wait';
     if (indexWord-1 < 0){
       setIndex(words.length-1)
       setTextToDisplay(words[words.length-1])
-      getSpecto(words[words.length-1])
+      await getSpecto(words[words.length-1])
       console.log(words.length-1)
     }
     else {
       setIndex(indexWord - 1)      
       setTextToDisplay(words[indexWord-1])
-      getSpecto(words[indexWord-1])
+      await getSpecto(words[indexWord-1])
       console.log(indexWord-1)
     }
+    setDisableButton(false)
   }
 
   const getSpecto = async (wordStr) => {
@@ -86,9 +97,18 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
       const res = await fetch(`${server}/spec/${wordStr}`)
       console.log(res.url)
       onChangeWord(res.url)
+      
+      // setAudio(new Audio(`${server}/audio/${wordStr}`))
+      // return fetch(`${server}/spec/${wordStr}`,{
+      //   method: 'GET'
+      // })
+      //   .then(handleErrors)
+      //   .then( (res) => {
+      //     console.log(res.url)
+      //     onChangeWord(res.url)
+      //     // audio.play()
+      //   })
   
-      //get audio and play
-      //audio.play()
       
     } catch (error) {
       console.log(error)
@@ -102,10 +122,12 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
     setTextToDisplay(textToDisplay)
 
     // setAudio(new Audio(`${server}/audio/merci`))
-    if (audio){
+    if (audio && !disableButton){
+      // This is playing once disableButton is false. i.e. once spec image is retrieved
       audio.play()
+      document.body.style.cursor='default';
     }
-  }, [indexWord, textToDisplay] );
+  }, [indexWord, textToDisplay, disableButton] );
 
 
   // console.log("wordnavigator words: ")
@@ -113,13 +135,13 @@ const WordNavigator: React.FC<WordNavigatorProps> = ({
   
   return (
     <div {...otherProps} className={styles.mainDiv}>
-      <IconButton onClick={onPrev}>
+      <IconButton onClick={onPrev} disabled={disableButton}>
         <SkipPreviousTwoTone className={styles.btn}/>
       </IconButton>
       <div style={{width:"200px", height:"70px"}}>
         <p className={styles.wordBox}> {`${textToDisplay}`} </p>
       </div>
-      <IconButton onClick={onNext}>
+      <IconButton onClick={onNext} disabled={disableButton}>
         <SkipNextTwoTone className={styles.btn}/>
       </IconButton>
     </div>
