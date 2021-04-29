@@ -39,6 +39,12 @@ const AppDrawer:React.FC<AppDrawerProps> = ({children}) => {
       <Head>
         <title>Pronounce app</title>
         <link rel="icon" href="/favicon.ico" />
+
+        {/* Prevents page stored in cache */}
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="-1" />
+        <meta httpEquiv="Cache-Control" content="no-store" />
+
       </Head>
 
       <div className={classes.root}>
