@@ -8,9 +8,9 @@ const SlideImg = props => {
  
   const [image, setImage] = useState(null)
   const [audio, setAudio] = useState(null)
-
   const [loadedImage, setLoadedImage] = useState(false)
   const [loadedAudio, setLoadedAudio] = useState(false)
+  const [userInteract, setUserInteract] = useState(false)
 
   const slide = () => {
     const canvas = document.getElementById('cv') as HTMLCanvasElement;
@@ -40,14 +40,21 @@ const SlideImg = props => {
     if (!(image)){
       setImage(new Image())
     }
+    //Avoid error: user didn't interact with document first
+    document.body.onmouseover = () => setUserInteract(true)
+    document.body.onscroll = () => setUserInteract(true)
+    document.body.onkeydown = () => setUserInteract(true)
+
   }) 
   
   useEffect(() => {
-    if (image) {
-      image.src = `${server}/spec/${props.word}`
+    if (userInteract) {
+      if (image) {
+        image.src = `${server}/spec/${props.word}`
+      }
+      setAudio(new Audio(`${server}/audio/${props.word}`))
     }
-    setAudio(new Audio(`${server}/audio/${props.word}`))
-  }, [props.word])
+  }, [props.word, userInteract])
 
 
 
