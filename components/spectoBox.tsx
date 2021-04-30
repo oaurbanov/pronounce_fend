@@ -1,8 +1,10 @@
-import React, { HTMLAttributes } from 'react'
+import React, {HTMLAttributes} from 'react'
 import { makeStyles} from "@material-ui/core/styles";
 
 import Play from "./utils/play"
 import Record from "./utils/record"
+
+import SlideImg from "./slideImg"
 
 // TODO: record audio, send to the backend and get the spectogram
 //       to paint it under the first spectogram, and compare
@@ -50,15 +52,13 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
   ... otherProps
 }) => {
   const styles = useStyles();
+
+
   return (
     <div {...otherProps} className={styles.mainDiv}>
 
       <div className={styles.spectoDiv}>
-        <img src={imgUrl} alt="not yet queried" 
-          style={{
-            width:"100%", //no respect of flex height
-          }}
-        />
+        <SlideImg imgUrl={imgUrl}/>
       </div>
 
       {/* <div style={{
