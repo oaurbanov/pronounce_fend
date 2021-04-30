@@ -19,18 +19,15 @@ yarn run dev
 ## TODOs
 
 ```
-Showing specto slide:
-  Specto img slides as audio is being played
-
 Record Sound
 Send it to backend
-Obtain its specto and send it back
-
+Obtain its specto and send it back to front-end
+Render new specto with old specto in the background
+Compare spectros with AI and give feedback
 
 # Validating:
 *Avoid automtic storing content: img/wav data and javaScript
 *Backend should go better and faster on payed version
-
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the page.

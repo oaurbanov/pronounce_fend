@@ -1,4 +1,4 @@
-import React, {HTMLAttributes} from 'react'
+import React, {HTMLAttributes, ReactPropTypes, useEffect, useState} from 'react'
 import { makeStyles} from "@material-ui/core/styles";
 
 import Play from "./utils/play"
@@ -44,13 +44,18 @@ const useStyles = makeStyles( () => ({
 }));
 
 type SpectoBoxProps = HTMLAttributes<HTMLDivElement> &{
-  imgUrl: string,
+  word: string,
+  disableBts: boolean,
+  setDisableBts: any,
 }
 
 const SpectoBox: React.FC<SpectoBoxProps> = ({
-  imgUrl,
+  word,
+  disableBts,
+  setDisableBts,
   ... otherProps
 }) => {
+
   const styles = useStyles();
 
 
@@ -58,7 +63,8 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
     <div {...otherProps} className={styles.mainDiv}>
 
       <div className={styles.spectoDiv}>
-        <SlideImg imgUrl={imgUrl}/>
+        <SlideImg word={word} setDisableBts={setDisableBts}
+        />
       </div>
 
       {/* <div style={{

@@ -8,13 +8,6 @@ export default function IndexPage({words}) {
   )
 }
 
-// <div className={styles.container}>
-//   <main className={styles.main}>
-//     <SpectoBox></SpectoBox>
-//   </main>
-// </div>
-
-
 
 // data fetching from jsonplaceholder
 /* 
@@ -28,7 +21,6 @@ export const getServerSideProps = async () => {
 
   try {
     const res = await fetch(`${server}/words`)
-    // const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6')
     words = await res.json()
     
   } catch (error) {
