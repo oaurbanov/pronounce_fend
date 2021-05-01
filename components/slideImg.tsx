@@ -12,7 +12,8 @@ const SlideImg = props => {
   const [loadedAudio, setLoadedAudio] = useState(false)
   const [userInteract, setUserInteract] = useState(false)
 
-  const slide = () => {
+  let x = 0
+  const slide = (muted=false) => {
     const canvas = document.getElementById('cv') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
     
@@ -22,12 +23,12 @@ const SlideImg = props => {
     ctx.clearRect(0, 0, W, H)
     ctx.drawImage(image, 0, 0, W, H);
 
-    const x = Math.round(W * audio.currentTime/audio.duration)
+    x = (muted) ? x+Math.round(W*0.05) : Math.round(W * audio.currentTime/audio.duration)
     ctx.fillStyle = 'lightGray';
     ctx.fillRect(x, 0, W, H);
 
     if (x < W){
-      window.requestAnimationFrame(slide)
+      window.requestAnimationFrame(()=>slide(muted))
     }
     else{
       setLoadedImage(false)
@@ -41,10 +42,7 @@ const SlideImg = props => {
       setImage(new Image())
     }
     //Avoid error: user didn't interact with document first
-    document.body.onmouseover = () => setUserInteract(true)
-    document.body.onscroll = () => setUserInteract(true)
-    document.body.onkeydown = () => setUserInteract(true)
-
+    document.body.onclick = () => setUserInteract(true)
   }) 
   
   useEffect(() => {
@@ -53,6 +51,11 @@ const SlideImg = props => {
         image.src = `${server}/spec/${props.word}`
       }
       setAudio(new Audio(`${server}/audio/${props.word}`))
+    }
+    else {
+      if (image) {
+        image.src = `${server}/spec/${props.word}`
+      }
     }
   }, [props.word, userInteract])
 
@@ -65,10 +68,12 @@ const SlideImg = props => {
       })
       document.body.style.cursor='default';
     }
-
     if (image) {
       image.onload = () => {
         setLoadedImage(true)
+        if (!userInteract){
+          slide(true)
+        }
       }
     }
     
