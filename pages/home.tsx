@@ -43,7 +43,7 @@ const Home = ({words}) => {
           <SpectoBox word = {word}  disableBts={disableBts} setDisableBts= {setDisableBts}
             style={{
               width: "80%",
-              height: "80%",
+              // height: "80%",
             }}
           />
       </div>

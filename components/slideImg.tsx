@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import Play from "./utils/play"
 import {server} from '../config'
 
 
-const SlideImg = props => {
+const SlideImg = (props) => {
  
   const [image, setImage] = useState(null)
   const [audio, setAudio] = useState(null)
@@ -24,7 +25,9 @@ const SlideImg = props => {
       ctx.clearRect(0, 0, W, H)
       ctx.drawImage(image, 0, 0, W, H);
   
-      x = (muted) ? x+Math.round(W*0.05) : Math.round(W * audio.currentTime/audio.duration)
+      x = (muted) ? 
+        x+Math.round(W*0.05) : 
+        Math.round(W * audio.currentTime/audio.duration)
       ctx.fillStyle = 'lightGray';
       ctx.fillRect(x, 0, W, H);
   
@@ -70,6 +73,7 @@ const SlideImg = props => {
     if (audio){
       audio.addEventListener('loadeddata', () => {
         setLoadedAudio(true) 
+        props.setAudioLen(audio.duration)
       })
       document.body.style.cursor='default';
     }
@@ -94,7 +98,11 @@ const SlideImg = props => {
 
   return (
 
-    <canvas id='cv' style={{width:"100%"}}>
+    <canvas id='cv' 
+      style={{
+        width:"100%",
+        // backgroundColor:"green",
+      }}>
     </canvas>
     
     // <img src={image.src} alt="not yet queried" 
@@ -108,6 +116,7 @@ const SlideImg = props => {
 SlideImg.propTypes = {
   word: PropTypes.string,
   setDisableBts: PropTypes.func,
+  setAudioLen: PropTypes.func,
 }
 
 export default SlideImg

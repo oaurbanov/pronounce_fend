@@ -1,5 +1,5 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 import {makeStyles} from '@material-ui/core/styles'
 
 import IconButton from '@material-ui/core/IconButton'
@@ -12,13 +12,22 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Record = () => {
+const Record = (props) => {
   const styles = useStyles();
   return (
-    <IconButton>
+    <IconButton 
+      onMouseDown={props.recordStart}
+      onMouseUp={props.recordEnd}
+      onClick={undefined}
+    >
       <MicIcon className={styles.btn} />
     </IconButton>
   )
+}
+
+Record.propTypes = {
+  recordStart : PropTypes.func,
+  recordEnd : PropTypes.func,
 }
 
 export default Record
