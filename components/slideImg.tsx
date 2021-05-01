@@ -14,26 +14,31 @@ const SlideImg = props => {
 
   let x = 0
   const slide = (muted=false) => {
-    const canvas = document.getElementById('cv') as HTMLCanvasElement;
-    var ctx = canvas.getContext('2d');
-    
-    const W = canvas.width
-    const H = canvas.height
-    
-    ctx.clearRect(0, 0, W, H)
-    ctx.drawImage(image, 0, 0, W, H);
-
-    x = (muted) ? x+Math.round(W*0.05) : Math.round(W * audio.currentTime/audio.duration)
-    ctx.fillStyle = 'lightGray';
-    ctx.fillRect(x, 0, W, H);
-
-    if (x < W){
-      window.requestAnimationFrame(()=>slide(muted))
-    }
-    else{
-      setLoadedImage(false)
-      setLoadedAudio(false)
-      props.setDisableBts(false)
+    try {
+      const canvas = document.getElementById('cv') as HTMLCanvasElement;
+      var ctx = canvas.getContext('2d');
+      
+      const W = canvas.width
+      const H = canvas.height
+      
+      ctx.clearRect(0, 0, W, H)
+      ctx.drawImage(image, 0, 0, W, H);
+  
+      x = (muted) ? x+Math.round(W*0.05) : Math.round(W * audio.currentTime/audio.duration)
+      ctx.fillStyle = 'lightGray';
+      ctx.fillRect(x, 0, W, H);
+  
+      if (x < W){
+        window.requestAnimationFrame(()=>slide(muted))
+      }
+      else{
+        setLoadedImage(false)
+        setLoadedAudio(false)
+        props.setDisableBts(false)
+      }
+      
+    } catch (error) {
+      console.log("Error on slide: ", error);
     }
   }
 
