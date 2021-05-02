@@ -47,8 +47,9 @@ let analyserNode = null;
 // let melLog = (f) => 2595*Math.log10(1+(f/700));
 let melLog = (f) => 2595*Math.log10(1+f/20);
 
-function paintOnCanvas(stream){
+function paintOnCanvas(stream, audioLen){
 
+  
   const audioSourceNode = audioCtx.createMediaStreamSource(stream);
   audioSourceNode.connect(analyserNode)
   analyserNode.connect(audioCtx.destination)
@@ -57,25 +58,25 @@ function paintOnCanvas(stream){
   var fft_size = 4096// 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768
   analyserNode.fftsize = fft_size
   const ffts = new Uint8Array(analyserNode.frequencyBinCount); //fft in binary
-
+  
   //5. paint column for this freqs
   const MIC_CALIBRATION = 1 //should be 1 for a good microphone
   const KEEP_FREQS = 1//0.7282*MIC_CALIBRATION // 0.1 first 10% of spectrum = 0-2k
   const LEN = ffts.length * KEEP_FREQS; // 1024 *0.5 = 512
-
+  
   var x = 0 
-  var sr = 44100//stream.sampleRate //Fmax = 44k100/2 = 22 kHz
+  var sr = audioCtx.sampleRate//44100 //Fmax = 44k100/2 = 22 kHz
   var sr_f = sr/fft_size
-
+  
   var h = 0
   var hMax =  melLog(LEN*sr_f)
-  var delta_x = 3
-
-
+  
   const canvas = document.getElementById('cv2') as HTMLCanvasElement;
   var ctx2 = canvas.getContext('2d');
-  const W2 = canvas.width
+  const W2 = canvas.width//300
   const H2 = canvas.height
+  //Velocity in X for painting specto, manually adjusted
+  var delta_x = Math.round(0.012*W2/audioLen)
   
   function loop() {
 
@@ -88,6 +89,7 @@ function paintOnCanvas(stream){
     if (!streamEnded){
       window.requestAnimationFrame(loop);
     }
+
 
     // // 3.  get actual image, clear canvas and put image slided
     // let imgData = CTX.getImageData(1, 0, W - 1, H2);
@@ -137,7 +139,7 @@ const SlideRecord = (props) => {
     recorder = await recordAudio()
     console.log("onmousedown 2");
     //painting good, not blocking call :)
-    paintOnCanvas(recorder.stream)
+    paintOnCanvas(recorder.stream, props.audioLen)
     console.log("onmousedown 3");
     recorder.start()
     console.log("onmousedown 4");
@@ -145,11 +147,19 @@ const SlideRecord = (props) => {
   const handleRecEnd = async () => {
     console.log("onmouseup 1");
     const audio = await recorder.stop()
+    console.log("audio: ", audio)
     console.log("onmouseup 2");
     await sleep(1000)
     console.log("onmouseup 3");
     //TODO: handle ex. tap too fast
     audio.play()
+    
+    
+    //TODO: instead of play, send to the backend
+    //      cut last audioLen, intelligent where specto match is stronger
+    //      send specto to frontend
+
+
     await sleep(1000)
     console.log("onmouseup 4");
   }
