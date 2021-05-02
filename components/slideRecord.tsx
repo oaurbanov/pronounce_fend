@@ -41,11 +41,11 @@ const recordAudio = () =>
 });
 
 // Get AudioContext singleton
-var audioCtx = null;
-var analyserNode = null;
-var sourceNode;
+let audioCtx = null;
+let analyserNode = null;
 
-let melLog = (f) => 2595*Math.log10(1+(f/500));
+// let melLog = (f) => 2595*Math.log10(1+(f/700));
+let melLog = (f) => 2595*Math.log10(1+f/20);
 
 function paintOnCanvas(stream){
 
@@ -54,22 +54,21 @@ function paintOnCanvas(stream){
   analyserNode.connect(audioCtx.destination)
   
   // 2. get FTT
-  
-  var fft_size = 2048 // 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768
+  var fft_size = 4096// 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768
   analyserNode.fftsize = fft_size
   const ffts = new Uint8Array(analyserNode.frequencyBinCount); //fft in binary
 
   //5. paint column for this freqs
   const MIC_CALIBRATION = 1 //should be 1 for a good microphone
-  const KEEP_FREQS = 0.7*MIC_CALIBRATION // 0.1 first 10% of spectrum = 0-2k
+  const KEEP_FREQS = 1//0.7282*MIC_CALIBRATION // 0.1 first 10% of spectrum = 0-2k
   const LEN = ffts.length * KEEP_FREQS; // 1024 *0.5 = 512
 
   var x = 0 
-  var sr = 44100//stream.sampleRate //TODO: find out sample rate
+  var sr = 44100//stream.sampleRate //Fmax = 44k100/2 = 22 kHz
   var sr_f = sr/fft_size
 
   var h = 0
-  var hMax =  melLog(2+ (LEN*sr_f) -1)
+  var hMax =  melLog(LEN*sr_f)
   var delta_x = 3
 
 
@@ -99,12 +98,12 @@ function paintOnCanvas(stream){
     analyserNode.getByteFrequencyData(ffts); // fft in bytes
     for (let i = 0; i < LEN; i++) {
       let rat = ffts[i] / 255;
-      let hue = Math.round(rat * 360);
+      let hue = Math.round( 300 - (rat*360));
       let sat = '100%';
-      let lit = 10 + (70 * rat) + '%'; // 10-80 %
+      let lit = 5 + (70 * rat) + '%'; // 10-80 %
 
       var last_h = h
-      h =  (melLog(2+ (i*sr_f) -1)/hMax)*(H2-1) //(value between 0 and H-1
+      h =  (melLog(i*sr_f)/hMax)*(H2-1) //(value between 0 and H-1
       ctx2.fillStyle = `hsl(${hue}, ${sat}, ${lit})`;
       ctx2.fillRect(x, H2-last_h, (x)- x+delta_x, (H2-last_h)- H2-h )
     }
@@ -123,6 +122,8 @@ const SlideRecord = (props) => {
   useEffect(() => {
     window.addEventListener('click', () => {
       if (audioCtx != null) return;
+      //TODO: handle ex, audioCtx used before first click
+      //      when record is the first click on screen
       audioCtx = new (window.AudioContext)();
       analyserNode = audioCtx.createAnalyser();
       // analyserNode.minDecibels = -90;
@@ -145,22 +146,23 @@ const SlideRecord = (props) => {
     console.log("onmouseup 1");
     const audio = await recorder.stop()
     console.log("onmouseup 2");
-    await sleep(3000)
+    await sleep(1000)
     console.log("onmouseup 3");
+    //TODO: handle ex. tap too fast
     audio.play()
-    await sleep(3000)
+    await sleep(1000)
     console.log("onmouseup 4");
   }
-  
-  return (
-    <div
-      style={{
+    
+    return (
+      <div
+        style={{
         display:"flex",
         flexDirection:"column",
         justifyContent:"center",
         width:"100%",
         // backgroundColor:"green",
-    }}>
+      }}>
       <canvas id='cv2' 
         style={{
           width:"100%",
