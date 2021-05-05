@@ -99,25 +99,28 @@ const SlideImg = (props) => {
   return (
     <div
       style={{
-      display:"flex",
-      flexDirection:"column",
-      justifyContent:"center",
-      width:"100%",
-      // backgroundColor:"green",
-    }}>
-      <Play onClick={onPlay} disabled={props.disableBts}/>
+        position:"relative",
+        display:"flex",
+        flexDirection:"column",
+        justifyContent:"center",
+        width:"100%",
+      }}
+    >
+      <Play
+        style={{
+          position:"absolute",
+          bottom:"2px",
+          right:"2px",
+        }}
+        onClick={onPlay}
+        disabled={props.disableBts}
+      />
       <canvas id='cv' 
         style={{
           width:"100%",
-          // backgroundColor:"green",
         }}>
       </canvas>
     </div>
-    // <img src={image.src} alt="not yet queried" 
-    //   style={{
-    //     width:"100%", //no respect of flex height
-    //   }}
-    // />
   )
 }
 

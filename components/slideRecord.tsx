@@ -167,20 +167,30 @@ const SlideRecord = (props) => {
   
   return (
     <div
-    style={{
+      style={{
+        position:"relative",
         display:"flex",
         flexDirection:"column",
         justifyContent:"center",
         width:"100%",
-        // backgroundColor:"green",
-      }}>
+      }}
+    >
+      <Record
+        style={{
+          position:"absolute",
+          bottom:"2px",
+          right:"2px",
+        }}
+        recordStart={ handleRecStart}
+        recordEnd={handleRecEnd}
+        disabled={props.disableBts}
+      />
       <canvas id='cv2' 
         style={{
           width:"100%",
           backgroundColor:"lightGray",
         }}>
       </canvas>
-      <Record recordStart={ handleRecStart} recordEnd={handleRecEnd} disabled={props.disableBts}/>
     </div>
   )
 }

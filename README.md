@@ -19,13 +19,13 @@ yarn run dev
 ## TODOs
 
 ```
-Record Sound
-Send it to backend
+Send sound to backend
 Obtain its specto and send it back to front-end
 Render new specto with old specto in the background
 Compare spectros with AI and give feedback
 
 # Validating:
+*Record Sound
 *Avoid automtic storing content: img/wav data and javaScript
 *Backend should go better and faster on payed version
 ```
