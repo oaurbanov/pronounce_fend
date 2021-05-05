@@ -63,13 +63,21 @@ const MenuButtons = ({route}) => {
   const classes = useStyles();
   return(
     <>
+       <Link  href={'/'} >
+        <Button
+          color="inherit"
+          className={clsx( route==='/'&& classes.butUnderLine )}
+          >
+          Home
+        </Button>
+      </Link>
       <Link  href={'/contact'} >
         <Button
           color="inherit"
           className={clsx( route==='/contact'&& classes.butUnderLine )}
           >
           Contact
-        </Button>                
+        </Button>
       </Link>
       <Link href={'/about'} >
         <Button 
