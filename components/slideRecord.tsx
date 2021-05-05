@@ -13,7 +13,6 @@ const recordAudio = () =>
     const audioChunks = [];
 
     mediaRecorder.ondataavailable = (event) => {
-      // console.log(event.data) //14562
       audioChunks.push(event.data)
     }
 
@@ -27,12 +26,16 @@ const recordAudio = () =>
                 track.stop();
             }
           });
-          const audioBlob = new Blob(audioChunks)
-          const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          const play = () => audio.play()
-          console.log('stoping')
-          resolve({ audioBlob, audioUrl, play})
+          if (audioChunks[0].size > 0){
+            console.log('stoping')
+            const audioBlob = new Blob(audioChunks)
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            const play = () => audio.play()
+            resolve({ audioBlob, audioUrl, play})
+          } else {
+            resolve(undefined)
+          }
         });
         mediaRecorder.stop()
       });
@@ -76,7 +79,7 @@ function paintOnCanvas(stream, audioLen){
   const W2 = canvas.width//300
   const H2 = canvas.height
   //Velocity in X for painting specto, manually adjusted
-  var delta_x = Math.round(0.012*W2/audioLen)
+  var delta_x = Math.round(0.012*W2/audioLen) //0.012
   
   function loop() {
 
@@ -119,22 +122,16 @@ function paintOnCanvas(stream, audioLen){
 
 const SlideRecord = (props) => {
 
-  let recorder = void
-
-  useEffect(() => {
-    window.addEventListener('click', () => {
-      if (audioCtx != null) return;
-      //TODO: handle ex, audioCtx used before first click
-      //      when record is the first click on screen
+  let recorder = undefined
+  
+  const handleRecStart = async () => {
+    if (audioCtx == null){
       audioCtx = new (window.AudioContext)();
       analyserNode = audioCtx.createAnalyser();
       // analyserNode.minDecibels = -90;
       // analyserNode.maxDecibels = -10;
       // analyserNode.smoothingTimeConstant = 0.85;
-    })
-  })
-  
-  const handleRecStart = async () => {
+    }
     console.log("onmousedown 1");
     recorder = await recordAudio()
     console.log("onmousedown 2");
@@ -144,29 +141,29 @@ const SlideRecord = (props) => {
     recorder.start()
     console.log("onmousedown 4");
   }
+
   const handleRecEnd = async () => {
-    console.log("onmouseup 1");
-    const audio = await recorder.stop()
-    console.log("audio: ", audio)
-    console.log("onmouseup 2");
-    await sleep(1000)
-    console.log("onmouseup 3");
-    //TODO: handle ex. tap too fast
-    audio.play()
-    
-    
-    //TODO: instead of play, send to the backend
-    //      cut last audioLen, intelligent where specto match is stronger
-    //      send specto to frontend
-
-
-    await sleep(1000)
-    console.log("onmouseup 4");
+    if (recorder){
+      const audio = await recorder.stop()
+      recorder = void
+  
+      props.setDisableBts(true)
+      console.log("audio: ", audio)
+      await sleep(1000)
+      if (audio !== undefined){
+        //TODO: instead of play, send to the backend
+        //      cut last audioLen, intelligent where specto match is stronger
+        //      send specto to frontend
+        audio.play()
+      }
+      await sleep(1000)
+      props.setDisableBts(false)
+    }
   }
-    
-    return (
-      <div
-        style={{
+  
+  return (
+    <div
+    style={{
         display:"flex",
         flexDirection:"column",
         justifyContent:"center",
@@ -179,13 +176,15 @@ const SlideRecord = (props) => {
           backgroundColor:"lightGray",
         }}>
       </canvas>
-      <Record recordStart={ handleRecStart} recordEnd={handleRecEnd}/>
+      <Record recordStart={ handleRecStart} recordEnd={handleRecEnd} disabled={props.disableBts}/>
     </div>
   )
 }
 
 SlideRecord.propTypes = {
-  audioLen : PropTypes.number
+  audioLen : PropTypes.number,
+  setDisableBts: PropTypes.func,
+  disableBts: PropTypes.bool,
 }
 
 export default SlideRecord

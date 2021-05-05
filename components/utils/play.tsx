@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {makeStyles} from '@material-ui/core/styles'
 
 import PlayIcon from '@material-ui/icons/PlayCircleFilledWhiteTwoTone';
@@ -14,15 +15,20 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const Play = () => {
+const Play = (props) => {
   
   const styles= useStyles();
 
   return (
-    <IconButton>
+    <IconButton onClick={props.onClick} disabled={props.disabled}>
       <PlayIcon className={styles.btn} />
     </IconButton>
   )
+}
+
+Play.propTypes = {
+  onClick : PropTypes.func,
+  disabled : PropTypes.bool,
 }
 
 export default Play
