@@ -24,8 +24,6 @@ const SlideImg = (props) => {
       ctx.clearRect(0, 0, W, H)
       ctx.drawImage(image, 0, 0, W, H);
 
-      console.log("--", {"currentTime": audio.currentTime, "duration":audio.duration} )
-  
       x = ( (audio.currentTime === 0 )|| (audio.currentTime === undefined) ) ? 
         x+Math.round(W*0.05) : 
         Math.round(W * audio.currentTime/audio.duration)
