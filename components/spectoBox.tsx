@@ -64,9 +64,12 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
     <div {...otherProps} className={styles.mainDiv}>
 
       <div className={styles.spectoDiv}>
-        <SlideImg word={word} setDisableBts={setDisableBts}
+        <SlideImg 
+          word={word} 
           setAudioLen={setAudioLen}
-        />
+          setDisableBts={setDisableBts}
+          disableBts={disableBts}
+          />
       </div>
 
       <div style={{
@@ -75,7 +78,11 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
       }}/>
       
       <div className={styles.spectoRecordDiv}>
-        <SlideRecord audioLen={audioLen} />
+        <SlideRecord 
+          audioLen={audioLen}
+          setDisableBts={setDisableBts}
+          disableBts={disableBts}
+        />
       </div>
     </div>
   )

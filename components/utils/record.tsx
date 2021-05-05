@@ -18,7 +18,9 @@ const Record = (props) => {
     <IconButton 
       onMouseDown={props.recordStart}
       onMouseUp={props.recordEnd}
+      onMouseLeave={props.recordEnd}
       onClick={undefined}
+      disabled={props.disabled}
     >
       <MicIcon className={styles.btn} />
     </IconButton>
@@ -28,6 +30,7 @@ const Record = (props) => {
 Record.propTypes = {
   recordStart : PropTypes.func,
   recordEnd : PropTypes.func,
+  disabled : PropTypes.bool,
 }
 
 export default Record

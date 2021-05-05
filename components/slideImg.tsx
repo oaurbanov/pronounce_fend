@@ -11,10 +11,9 @@ const SlideImg = (props) => {
   const [audio, setAudio] = useState(null)
   const [loadedImage, setLoadedImage] = useState(false)
   const [loadedAudio, setLoadedAudio] = useState(false)
-  const [userInteract, setUserInteract] = useState(false)
 
   let x = 0
-  const slide = (muted=false) => {
+  const slide = () => {
     try {
       const canvas = document.getElementById('cv') as HTMLCanvasElement;
       var ctx = canvas.getContext('2d');
@@ -24,19 +23,19 @@ const SlideImg = (props) => {
       
       ctx.clearRect(0, 0, W, H)
       ctx.drawImage(image, 0, 0, W, H);
+
+      console.log("--", {"currentTime": audio.currentTime, "duration":audio.duration} )
   
-      x = (muted) ? 
+      x = ( (audio.currentTime === 0 )|| (audio.currentTime === undefined) ) ? 
         x+Math.round(W*0.05) : 
         Math.round(W * audio.currentTime/audio.duration)
       ctx.fillStyle = 'lightGray';
       ctx.fillRect(x, 0, W, H);
   
       if (x < W){
-        window.requestAnimationFrame(()=>slide(muted))
+        window.requestAnimationFrame(()=>slide())
       }
       else{
-        setLoadedImage(false)
-        setLoadedAudio(false)
         props.setDisableBts(false)
       }
       
@@ -44,30 +43,21 @@ const SlideImg = (props) => {
       console.log("Error on slide: ", error);
     }
   }
-
+  
   useEffect(() => {
     if (!(image)){
       setImage(new Image())
     }
-    //Avoid error: user didn't interact with document first
-    document.body.onclick = () => setUserInteract(true)
   }) 
   
   useEffect(() => {
-    if (userInteract) {
-      if (image) {
-        image.src = `${server}/spec/${props.word}`
-      }
-      setAudio(new Audio(`${server}/audio/${props.word}`))
+    if (image) {
+      image.src = `${server}/spec/${props.word}`
     }
-    else {
-      if (image) {
-        image.src = `${server}/spec/${props.word}`
-      }
-    }
-  }, [props.word, userInteract])
-
-
+    setAudio(new Audio(`${server}/audio/${props.word}`))
+    setLoadedImage(false)
+    setLoadedAudio(false)
+  }, [props.word])
 
   useEffect(() => {
     if (audio){
@@ -80,9 +70,7 @@ const SlideImg = (props) => {
     if (image) {
       image.onload = () => {
         setLoadedImage(true)
-        if (!userInteract){
-          slide(true)
-        }
+        //slide(true)
       }
     }
     
@@ -90,21 +78,41 @@ const SlideImg = (props) => {
   
   useEffect(() => {
     if(loadedImage && loadedAudio){
-      audio.play()
+      //TODO: this should be Promise, when resolved setDisableBts(false)
+      audio.play() //TODO: handle exc: user has not interact
       slide()
     }
   }, [loadedImage, loadedAudio])
+  
+  const onPlay = () => {
+    console.log("onPlay");
+    console.log(loadedImage, loadedAudio);
+    if(loadedImage && loadedAudio){
+      props.setDisableBts(true)
+      //TODO: this should be Promise, when resolved setDisableBts(false)
+      audio.play()
+      slide()
+    }
+  }
 
 
   return (
-
-    <canvas id='cv' 
+    <div
       style={{
-        width:"100%",
-        // backgroundColor:"green",
-      }}>
-    </canvas>
-    
+      display:"flex",
+      flexDirection:"column",
+      justifyContent:"center",
+      width:"100%",
+      // backgroundColor:"green",
+    }}>
+      <Play onClick={onPlay} disabled={props.disableBts}/>
+      <canvas id='cv' 
+        style={{
+          width:"100%",
+          // backgroundColor:"green",
+        }}>
+      </canvas>
+    </div>
     // <img src={image.src} alt="not yet queried" 
     //   style={{
     //     width:"100%", //no respect of flex height
@@ -115,8 +123,9 @@ const SlideImg = (props) => {
 
 SlideImg.propTypes = {
   word: PropTypes.string,
-  setDisableBts: PropTypes.func,
   setAudioLen: PropTypes.func,
+  setDisableBts: PropTypes.func,
+  disableBts: PropTypes.bool,
 }
 
 export default SlideImg
