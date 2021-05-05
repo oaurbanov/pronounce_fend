@@ -124,22 +124,29 @@ const SlideRecord = (props) => {
 
   let recorder = undefined
   
+  let evRecStart=true
   const handleRecStart = async () => {
-    if (audioCtx == null){
-      audioCtx = new (window.AudioContext)();
-      analyserNode = audioCtx.createAnalyser();
-      // analyserNode.minDecibels = -90;
-      // analyserNode.maxDecibels = -10;
-      // analyserNode.smoothingTimeConstant = 0.85;
+    if((!recorder) && evRecStart){
+      evRecStart=false
+      if (audioCtx == null){
+        audioCtx = new (window.AudioContext)();
+        analyserNode = audioCtx.createAnalyser();
+        // analyserNode.minDecibels = -90;
+        // analyserNode.maxDecibels = -10;
+        // analyserNode.smoothingTimeConstant = 0.85;
+      }
+      recorder = await recordAudio()
+      //painting good, not blocking call :)
+      paintOnCanvas(recorder.stream, props.audioLen)
+      recorder.start()
+      evRecStart=true
     }
-    recorder = await recordAudio()
-    //painting good, not blocking call :)
-    paintOnCanvas(recorder.stream, props.audioLen)
-    recorder.start()
   }
 
+  let evRecEnd=true
   const handleRecEnd = async () => {
-    if (recorder){
+    if (recorder && evRecEnd){
+      evRecEnd=false
       const audio = await recorder.stop()
       recorder = void
   
@@ -154,6 +161,7 @@ const SlideRecord = (props) => {
       }
       await sleep(1000)
       props.setDisableBts(false)
+      evRecEnd=true
     }
   }
   

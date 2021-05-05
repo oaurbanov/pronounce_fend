@@ -17,8 +17,13 @@ const Record = (props) => {
   return (
     <IconButton 
       onMouseDown={props.recordStart}
+      onPointerDown={props.recordStart}
+
       onMouseUp={props.recordEnd}
+      onPointerUp={props.recordEnd}
       onMouseLeave={props.recordEnd}
+      onPointerLeave={props.recordEnd}
+
       onClick={undefined}
       disabled={props.disabled}
     >
