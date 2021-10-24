@@ -32,12 +32,14 @@ const Record : React.FC<RecordProps> = ({
     <div {...otherProps}>
       <IconButton 
         onMouseDown={recordStart}
-        onPointerDown={recordStart}
+        // onPointerDown={recordStart}
+
+        // Watchout: multiple  callbacks make multiple calls and messes up recorder
 
         onMouseUp={recordEnd}
-        onPointerUp={recordEnd}
-        onMouseLeave={recordEnd}
-        onPointerLeave={recordEnd}
+        // onPointerUp={recordEnd}
+        // onMouseLeave={recordEnd}
+        // onPointerLeave={recordEnd}
 
         onClick={undefined}
         disabled={disabled}
