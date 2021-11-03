@@ -1,4 +1,6 @@
 
+import {server} from '../config'
+
 const sleep = time => new Promise(resolve => setTimeout(resolve, time))
 
 // let melLog = (f) => 2595*Math.log10(1+(f/700));
@@ -155,6 +157,28 @@ export default class Recorder{
       //      cut last audioLen, intelligent where specto match is stronger
       //      send specto to frontend
       audio.play()
+
+      const formData = new FormData();
+      formData.append('file', audio.audioBlob);
+      console.log(formData)
+      // `${server}/specfromaudio/${props.word}`
+      let urlPost = `${server}/specfromaudio/merci`
+      fetch(
+        urlPost,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
+
+
     }
     await sleep(1000)
     
