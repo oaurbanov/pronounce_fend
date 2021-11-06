@@ -22,8 +22,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ```
 Send sound to backend (Done)
-Obtain its specto and send it back to front-end
-Render new specto with old specto in the background
+Obtain its specto and send it back to front-end (Done)
+Render new specto with old specto in the background (Done)
+Get ride of sound and image catching in fron-end
 Compare spectros with AI and give feedback
 
 # Validating:

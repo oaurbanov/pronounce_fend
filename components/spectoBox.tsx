@@ -60,6 +60,8 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
 
   const [audioLen, setAudioLen] = useState(0)
 
+  const [recorded, setRecorded] = useState(false)
+
   return (
     <div {...otherProps} className={styles.mainDiv}>
 
@@ -69,6 +71,7 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
           setAudioLen={setAudioLen}
           setDisableBts={setDisableBts}
           disableBts={disableBts}
+          canvasId={'cv'}
           />
       </div>
 
@@ -78,11 +81,24 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
       }}/>
       
       <div className={styles.spectoRecordDiv}>
-        <SlideRecord 
-          audioLen={audioLen}
-          setDisableBts={setDisableBts}
-          disableBts={disableBts}
-        />
+
+        {!recorded && (
+          <SlideRecord 
+            audioLen={audioLen}
+            setDisableBts={setDisableBts}
+            disableBts={disableBts}
+            setRecorded={setRecorded}
+          />
+        )}
+        {recorded && (
+          <SlideImg 
+            word={'new'} 
+            setAudioLen={setAudioLen}
+            setDisableBts={setDisableBts}
+            disableBts={disableBts}
+            canvasId={'cv3'}
+          />        
+        )}
       </div>
     </div>
   )

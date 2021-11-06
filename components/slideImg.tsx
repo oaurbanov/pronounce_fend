@@ -5,7 +5,7 @@ import Play from "./utils/play"
 import {server} from '../config'
 
 
-const SlideImg = (props) => {
+const SlideImg = ({word, setAudioLen, setDisableBts, disableBts, canvasId}) => {
  
   const [image, setImage] = useState(null)
   const [audio, setAudio] = useState(null)
@@ -15,7 +15,7 @@ const SlideImg = (props) => {
   let x = 0
   const slide = () => {
     try {
-      const canvas = document.getElementById('cv') as HTMLCanvasElement;
+      const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
       var ctx = canvas.getContext('2d');
       
       const W = canvas.width
@@ -34,7 +34,7 @@ const SlideImg = (props) => {
         window.requestAnimationFrame(()=>slide())
       }
       else{
-        props.setDisableBts(false)
+        setDisableBts(false)
       }
       
     } catch (error) {
@@ -46,31 +46,43 @@ const SlideImg = (props) => {
     if (!(image)){
       setImage(new Image())
     }
+    console.log('0 effect default')
+    console.log('image: ', image)
   }) 
   
   useEffect(() => {
     if (image) {
-      image.src = `${server}/spec/${props.word}`
+      image.src = `${server}/spec/${word}`
     }
-    setAudio(new Audio(`${server}/audio/${props.word}`))
+    setAudio(new Audio(`${server}/audio/${word}`))
     setLoadedImage(false)
     setLoadedAudio(false)
-  }, [props.word])
+
+    console.log('1 effect word')
+    console.log('word: ', word)
+    console.log('image: ', image)
+  }, [word])
 
   useEffect(() => {
     if (audio){
       audio.addEventListener('loadeddata', () => {
         setLoadedAudio(true) 
-        props.setAudioLen(audio.duration)
+        setAudioLen(audio.duration)
       })
       document.body.style.cursor='default';
     }
     if (image) {
+      if(!loadedImage){
+        image.src = `${server}/spec/${word}?version=1`
+      }
       image.onload = () => {
+        console.log('image ', word , ' loaded')
         setLoadedImage(true)
         //slide(true)
       }
     }
+    console.log('2 effect image audio')
+    console.log('image: ', image)
     
   }, [audio, image])
   
@@ -86,7 +98,7 @@ const SlideImg = (props) => {
     console.log("onPlay");
     console.log(loadedImage, loadedAudio);
     if(loadedImage && loadedAudio){
-      props.setDisableBts(true)
+      setDisableBts(true)
       //TODO: this should be Promise, when resolved setDisableBts(false)
       audio.play()
       slide()
@@ -111,9 +123,9 @@ const SlideImg = (props) => {
           right:"2px",
         }}
         onClick={onPlay}
-        disabled={props.disableBts}
+        disabled={disableBts}
       />
-      <canvas id='cv' 
+      <canvas id= {canvasId} 
         style={{
           width:"100%",
         }}>

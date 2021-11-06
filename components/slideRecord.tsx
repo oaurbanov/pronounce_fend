@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Recorder from "./recorder"
 import Record from "./utils/record"
 
-const SlideRecord = ({audioLen, setDisableBts, disableBts}) => {
+const SlideRecord = ({audioLen, setDisableBts, disableBts, setRecorded}) => {
   
   // let recorder = new Recorder(audioLen,'cv2')
 
@@ -46,10 +46,12 @@ const SlideRecord = ({audioLen, setDisableBts, disableBts}) => {
       evRecEnd=false
       setDisableBts(true)
 
-      recorder.stop()
+      await recorder.stop()
 
       setDisableBts(false)
       evRecEnd=true
+
+      setRecorded(true)
     }
   }
   

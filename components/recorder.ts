@@ -180,7 +180,7 @@ export default class Recorder{
 
 
     }
-    await sleep(1000)
+    await sleep(3000)
     
   }
 }
