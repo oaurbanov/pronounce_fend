@@ -151,18 +151,15 @@ export default class Recorder{
     // this.recorder = void
     
     console.log("audio: ", audio)
-    await sleep(1000)
     if (audio !== undefined){
-      //TODO: instead of play, send to the backend
-      //      cut last audioLen, intelligent where specto match is stronger
+      //TODO: 
       //      send specto to frontend
-      audio.play()
+      //      cut last audioLen, intelligent where specto match is stronger
 
       const formData = new FormData();
       formData.append('file', audio.audioBlob);
       console.log(formData)
-      // `${server}/specfromaudio/${props.word}`
-      let urlPost = `${server}/specfromaudio/merci`
+      let urlPost = `${server}/specfromaudio/new`
       fetch(
         urlPost,
         {
@@ -177,10 +174,7 @@ export default class Recorder{
           console.error('Error:', error);
         });
 
-
-
     }
-    await sleep(3000)
     
   }
 }

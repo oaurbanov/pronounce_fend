@@ -59,8 +59,11 @@ const SpectoBox: React.FC<SpectoBoxProps> = ({
 
 
   const [audioLen, setAudioLen] = useState(0)
-
   const [recorded, setRecorded] = useState(false)
+
+  useEffect(() => {
+    setRecorded(false)
+  },[word])
 
   return (
     <div {...otherProps} className={styles.mainDiv}>
